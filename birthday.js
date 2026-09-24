@@ -958,6 +958,10 @@ function startMusic(){
   if (playPromise !== undefined) {
     playPromise.then(() => {
       setMusicUI(true);
+      window.removeEventListener('pointerdown', onFirstInteraction);
+      window.removeEventListener('click', onFirstInteraction);
+      window.removeEventListener('touchstart', onFirstInteraction);
+      window.removeEventListener('keydown', onFirstInteraction);
     }).catch((err) => {
       console.warn('Autoplay prevented by browser:', err);
     });
@@ -996,7 +1000,12 @@ if (musicToggle){
   });
 }
 
-// Start audio on first user gesture anywhere
+// Automatically play the audio after 1 second
+setTimeout(() => {
+  startMusic();
+}, 1000);
+
+// Start audio on first user gesture anywhere as fallback
 const onFirstInteraction = () => {
   startMusic();
   window.removeEventListener('pointerdown', onFirstInteraction);
